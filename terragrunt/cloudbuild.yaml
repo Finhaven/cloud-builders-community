@@ -2,10 +2,16 @@
 # $ gcloud builds submit . --config=cloudbuild.yaml
 
 substitutions:
-  _TERRAFORM_VERSION: 0.12.29
-  _TERRAFORM_VERSION_SHA256SUM: 872245d9c6302b24dc0d98a1e010aef1e4ef60865a2d1f60102c8ad03e9d5a1d
-  _TERRAGRUNT_VERSION: 0.26.4
-  _TERRAGRUNT_VERSION_SHA256SUM: 8459105f8f02663d44108d3240e11c6944f22f1e59b4e2f061eae3b32911ac9b
+  # Latest Terraform releases:
+  # https://releases.hashicorp.com/terraform/
+  # use the SHA256SUB for terraform_X.X.X_linux_amd64.zip
+  _TERRAFORM_VERSION: 1.4.4
+  _TERRAFORM_VERSION_SHA256SUM: 67541c1f6631befcc25b764028e5605e59234d4424e60a256518ee1e8dd50593
+  # Latest Terragrunt releases:
+  # https://github.com/gruntwork-io/terragrunt/releases/
+  # use the SHA256SUB for terragrunt_linux_amd64
+  _TERRAGRUNT_VERSION: 0.45.2
+  _TERRAGRUNT_VERSION_SHA256SUM: f6e43f576ae5f8c6f24c15105334185cddf39342bbeea334408ef0415e1045da
 
 steps:
   - name: "gcr.io/cloud-builders/docker"

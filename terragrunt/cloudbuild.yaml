@@ -2,16 +2,23 @@
 # $ gcloud builds submit . --config=cloudbuild.yaml
 
 substitutions:
+  _PROJECT_ID: global-artifact-registry-34e8
+  _LOCATION: northamerica-northeast1
+  _REPO_NAME: container-repo
+  _REPO_URL: "${_LOCATION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}"
   # Latest Terraform releases:
   # https://releases.hashicorp.com/terraform/
   # use the SHA256SUB for terraform_X.X.X_linux_amd64.zip
-  _TERRAFORM_VERSION: 1.4.4
-  _TERRAFORM_VERSION_SHA256SUM: 67541c1f6631befcc25b764028e5605e59234d4424e60a256518ee1e8dd50593
+  _TERRAFORM_VERSION: 1.4.6
+  _TERRAFORM_VERSION_SHA256SUM: e079db1a8945e39b1f8ba4e513946b3ab9f32bd5a2bdf19b9b186d22c5a3d53b
   # Latest Terragrunt releases:
   # https://github.com/gruntwork-io/terragrunt/releases/
   # use the SHA256SUB for terragrunt_linux_amd64
-  _TERRAGRUNT_VERSION: 0.45.2
-  _TERRAGRUNT_VERSION_SHA256SUM: f6e43f576ae5f8c6f24c15105334185cddf39342bbeea334408ef0415e1045da
+  _TERRAGRUNT_VERSION: 0.47.0
+  _TERRAGRUNT_VERSION_SHA256SUM: 98d45f6bfbfae84b51364c1ad6920f09ecb4d834908b0535e4e331a9fc6fc75b
+options:
+  # Allow substitutions to reference other substitution values.
+  dynamic_substitutions: true
 
 steps:
   - name: "gcr.io/cloud-builders/docker"
@@ -31,11 +38,11 @@ steps:
       - --build-arg
       - TERRAGRUNT_VERSION_SHA256SUM=${_TERRAGRUNT_VERSION_SHA256SUM}
       - --tag
-      - "gcr.io/${PROJECT_ID}/terragrunt:${_TERRAFORM_VERSION}-${_TERRAGRUNT_VERSION}"
+      - "${_REPO_URL}/terragrunt:${_TERRAFORM_VERSION}-${_TERRAGRUNT_VERSION}"
       - --tag
-      - "gcr.io/${PROJECT_ID}/terragrunt:latest"
+      - "${_REPO_URL}/terragrunt:latest"
       - "."
 images:
-  - "gcr.io/${PROJECT_ID}/terragrunt:${_TERRAFORM_VERSION}-${_TERRAGRUNT_VERSION}"
-  - "gcr.io/${PROJECT_ID}/terragrunt:latest"
+  - "${_REPO_URL}/terragrunt:${_TERRAFORM_VERSION}-${_TERRAGRUNT_VERSION}"
+  - "${_REPO_URL}/terragrunt:latest"
 tags: ["cloud-builders-community"]
